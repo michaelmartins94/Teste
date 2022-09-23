@@ -1,4 +1,10 @@
 $(function(){
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
     $('.date').inputmask('99/99/9999');
     $('#table_id').dataTable(
         {
@@ -38,6 +44,8 @@ $(function(){
         e.preventDefault();
         let error = '';
 
+        let id = $("#save").attr('previsao_id');
+        
         $(".campo_obrigatorio").each(async function() {
             if($(this).val().trim() == ''){
                 error = 1;
@@ -54,23 +62,21 @@ $(function(){
         });
         
         if(error == ''){
-            // $.ajax({
-            //     type: 'POST',
-            //     url: "{{ route('client.posts.post') }}",
-            //     data: {
-            //         id: id,
-            //         identification: identification,
-            //         post: post,
-            //         type: type,
-            //         name: name
-            //     },
-            //     success: function(data) {
-            //         toastr.success(data.msg);
-            //         setTimeout(() => {
-            //             location.reload();
-            //         }, 1000);
-            //     }
-            // });
+            $.ajax({
+                type: 'POST',
+                url:"add",
+                data: {
+                    id:id,
+                    data: $("#data").val(),
+                    cidade_id: $("#cidade option:selected").val()
+                },
+                success: function(data) {
+                    toastr.success(data.msg);
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1000);
+                }
+            });
         }
         
     });
@@ -87,18 +93,24 @@ $(function(){
         $(".campo_obrigatorio").removeClass('is-valid');
         $(".campo_obrigatorio").removeClass('is-invalid');
 
-        // $.ajax({
-        //     type: 'GET',
-        //     url: "{{ route('admin.credits.get.id',['id'=>"+param_credit_id+"]) }}",
-        //     data: {
-        //         id: param_credit_id
-        //     },
-        //     success: function(data) {
- 
-        //     }
-        // });
+        let previsao_id = $(this).attr('previsao_id');
 
-        $('#add').modal('show');
+        $("#save").attr('previsao_id',previsao_id);
+
+        $.ajax({
+            type: 'POST',
+            url: "edit",
+            data: {
+                id: previsao_id
+            },
+            success: function(data) {
+                $("#data").val(data.data),
+                $("#cidade option[value="+data.cidade_id+"]").attr('selected','selected');
+                $('#add').modal('show');
+            }
+        });
+       
+        
     });
 
     $('.modal_remove').click(function(){
@@ -106,21 +118,20 @@ $(function(){
         $('#remove_previsao').attr('previsao_id',$(this).attr('previsao_id'));
     });
 
-    $('#remove_param_credit').click(function(){
+    $('#remove_previsao').click(function(){
         let previsao_id = $(this).attr('previsao_id');
 
         $.ajax({
             type: 'DELETE',
-            url: "{{ route('weather.remove') }}",
+            url: "delete",
             data: {
                 id: previsao_id
             },
             success: function(data) {
                 $('.modal_remove[previsao_id='+previsao_id+']').closest('tr').html('');
-                // toastr.success(data.msg);
+                toastr.success(data.msg);
             }
         });
     });
 
 });
-

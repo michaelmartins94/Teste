@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [App\Http\Controllers\ClimaController::class, 'index'])->name('clima');
+Route::post('/add', [App\Http\Controllers\ClimaController::class, 'add'])->name('clima.add');
+Route::post('/edit', [App\Http\Controllers\ClimaController::class, 'edit'])->name('clima.edit');
+Route::delete('/delete', [App\Http\Controllers\ClimaController::class, 'delete'])->name('clima.delete');
