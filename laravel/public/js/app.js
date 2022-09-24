@@ -39,6 +39,14 @@ $(function(){
         }
     );
 
+    $("#data").change(function(){
+        let data = moment($(this).val());
+
+        if(!data.isValid()){
+            $(this).val('');
+        }
+    });
+
     $("#form_add").unbind('submit');
     $("#form_add").submit(async function(e) {
         e.preventDefault();

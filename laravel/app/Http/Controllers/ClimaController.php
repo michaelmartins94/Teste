@@ -19,7 +19,6 @@ class ClimaController extends Controller
       
         $dados['climas'] =  $rows;
         $dados['cidades'] =  $cidades->all();
-        //dd($dados);
         return view('clima',compact('dados'));
     }
 

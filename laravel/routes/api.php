@@ -22,15 +22,18 @@ Route::post('/clima', function (Request $request,Clima $clima,Cidade $cidade) {
     $data = $request->data;
 
     $cidades = $cidade->all();
+    $api_id = '&APPID=5e975f12e24a8b307fd2d539fb92f507';
+    $url = 'http://api.openweathermap.org/data/2.5/weather?q=';
 
     foreach ($cidades as $c) {
         $row = $clima->getClimaCidade($c->id,$data);
+        $endpoint = $url.$c->cidade.$api_id;
         
         if(count($row) > 0){
             $dados[$c->id] = $row;
         }else{
             if($data == date('Y-m-d')){
-                $response = Http::post('http://api.openweathermap.org/data/2.5/weather?q='.$c->cidade.'&APPID=5e975f12e24a8b307fd2d539fb92f507');
+                $response = Http::post($endpoint);
                 $response = json_decode($response->getBody(), true);
                 
                 $temp["data"]= $data;

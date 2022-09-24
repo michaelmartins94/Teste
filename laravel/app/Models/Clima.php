@@ -49,7 +49,11 @@ class Clima extends Model
 
     public function getClima($cidade)
     {
-        $response = Http::post('http://api.openweathermap.org/data/2.5/weather?q='.$cidade.'&APPID=5e975f12e24a8b307fd2d539fb92f507');
+        $url = 'http://api.openweathermap.org/data/2.5/weather?q=';
+        $api_key ='&APPID=5e975f12e24a8b307fd2d539fb92f507';
+        $endpoint = $url.$cidade.$api_key;
+
+        $response = Http::post($endpoint);
         $response = json_decode($response->getBody(), true);
 
         return $response;
