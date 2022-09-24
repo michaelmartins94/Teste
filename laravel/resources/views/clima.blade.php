@@ -35,7 +35,6 @@
                     <th>Minima</th>
                     <th>Máxima</th>
                     <th>Pressão</th>
-                    <th>Nível do mar</th>
                     <th>Umidade</th>
                     <th>Ações</th>
                 </tr>
@@ -49,7 +48,6 @@
                         <td>{{ $clima->minima }}°</td>
                         <td>{{ $clima->maxima }}°</td>
                         <td>{{ $clima->pressao }}</td>
-                        <td>{{ $clima->nivel_mar }}</td>
                         <td>{{ $clima->umidade }}%</td>
                         <td>
                             <button type="button" class="btn btn-primary btn-block btn-sm modal_edit" previsao_id="{{ $clima->id }}">

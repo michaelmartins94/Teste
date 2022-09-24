@@ -3,6 +3,7 @@
 namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Http;
 
 class Clima extends Model
 {
@@ -18,7 +19,6 @@ class Clima extends Model
         'minima',
         'media',
         'pressao',
-        'nivel_mar',
         'umidade',
         'created_at',
         'updated_at'
@@ -33,4 +33,25 @@ class Clima extends Model
              ->get();
     }
 
+    public function getClimaCidade($cidade_id,$data)
+    {
+        return 
+        $this->select('*')
+             ->where('cidade_id','=',$cidade_id)
+             ->where('data','=',$data)
+             ->get();
+    }
+
+    public function createApi($clima)
+    {
+        $this->insert($clima);
+    }
+
+    public function getClima($cidade)
+    {
+        $response = Http::post('http://api.openweathermap.org/data/2.5/weather?q='.$cidade.'&APPID=5e975f12e24a8b307fd2d539fb92f507');
+        $response = json_decode($response->getBody(), true);
+
+        return $response;
+    }
 }

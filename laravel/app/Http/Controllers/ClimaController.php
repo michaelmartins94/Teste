@@ -23,17 +23,20 @@ class ClimaController extends Controller
         return view('clima',compact('dados'));
     }
 
-    public function add(Request $request,Clima $clima)
+    public function add(Request $request,Clima $clima,Cidade $cidade)
     {
+        $c = $cidade->find($request->cidade_id);
+        $temp = $clima->getClima($c->cidade);
 
-        $dados['data'] = date('Y-d-m',strtotime($request->data));
-        $dados['cidade_id'] = $request->cidade_id;
-        $dados['media'] = "25";
-        $dados['minima'] = "20";
-        $dados['maxima'] = "31";
-        $dados['pressao'] = "765";
-        $dados['nivel_mar'] = "1043";
-        $dados['umidade'] = "60";
+        $dados = array(
+            'data'=>date('Y-m-d',strtotime($request->data)),
+            'cidade_id'=>$request->cidade_id,
+            'maxima'=> $temp['main']['temp_max'],
+            'minima'=> $temp['main']['temp_min'],
+            'media'=> $temp['main']['temp'],
+            'pressao'=> $temp['main']['pressure'],
+            'umidade'=> $temp['main']['humidity']
+        );
 
         if($request->id == ""){
             $clima->insert($dados);
