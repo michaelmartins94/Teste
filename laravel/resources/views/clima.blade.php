@@ -73,7 +73,7 @@
             <form id="form_add" enctype="multipart/form-data">
                 <div class="modal-body">
                     <label>Data</label>
-                    <input class="form-control campo_obrigatorio date " placeholder="" id="data"/>
+                    <input class="form-control campo_obrigatorio" id="data"/>
                     <span class="error invalid-feedback">Campo inválido</span>
                     <br>
                     <label>Cidade</label>

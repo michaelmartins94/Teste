@@ -5,7 +5,7 @@ $(function(){
         }
     });
 
-    $('.date').inputmask('99/99/9999');
+    $('#data').inputmask("99/99/9999",{ alias: "datetime", inputFormat: "dd/mm/yyyy"})
     $('#table_id').dataTable(
         {
             "bSort": false,
@@ -40,10 +40,12 @@ $(function(){
     );
 
     $("#data").change(function(){
-        let data = moment($(this).val());
+        let data = $(this).val();
+        data = data.split("/").reverse().join("-");
+        data = moment(data);
 
         if(!data.isValid()){
-            $(this).val('');
+            $(this).val('data');
         }
     });
 
@@ -70,12 +72,15 @@ $(function(){
         });
         
         if(error == ''){
+            let data = $('#data').val();
+            data = data.split("/").reverse().join("-");
+
             $.ajax({
                 type: 'POST',
                 url:"add",
                 data: {
                     id:id,
-                    data: $("#data").val(),
+                    data: data,
                     cidade_id: $("#cidade option:selected").val()
                 },
                 success: function(data) {

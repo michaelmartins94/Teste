@@ -28,7 +28,7 @@ class ClimaController extends Controller
         $temp = $clima->getClima($c->cidade);
 
         $dados = array(
-            'data'=>date('Y-m-d',strtotime($request->data)),
+            'data'=>$request->data,
             'cidade_id'=>$request->cidade_id,
             'maxima'=> $temp['main']['temp_max'],
             'minima'=> $temp['main']['temp_min'],
@@ -48,7 +48,6 @@ class ClimaController extends Controller
 
     public function edit(Request $request,Clima $clima)
     {
-        
         $dados = $clima->find($request->id);
         $dados['data'] = date('d/m/Y',strtotime($dados['data']));
 
